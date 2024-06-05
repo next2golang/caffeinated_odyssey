@@ -18,7 +18,8 @@ async def place_order():
   while True:
     order_status = order_queue.get_order_status(order["order_id"])
     if order_status == "ready":
+      # can keep the following line if worry about queue stack size, and if worry about losting task in extra cases like connection lost, can remove the line.
+      order_queue.remove_order(order["order_id"])
       break
     await asyncio.sleep(1)
-  order_queue.remove_order(order["order_id"])
   return {"message": "Your americano is ready!", "order_id": order["order_id"]}
